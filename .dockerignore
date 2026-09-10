@@ -1,0 +1,47 @@
+# Build context for `next build`. Everything here either cannot affect the
+# build or must not reach the image. Docker matches these patterns per path
+# component, so dot-directories are listed one by one rather than as `.*/`.
+
+# Version control and CI
+**/.git
+**/.gitignore
+**/.gitattributes
+**/.github
+
+# Editor and agent tooling
+**/.idea
+**/.vscode
+**/.claude
+**/.agents
+**/.cursor
+**/.DS_Store
+skills-lock.json
+
+# Dependencies and build output — reinstalled and rebuilt inside the image
+**/node_modules
+**/.next
+out
+build
+coverage
+**/*.tsbuildinfo
+
+# Documentation and instructions
+**/*.md
+
+# Secrets. `.env.example` is excluded too: the image reads real environment
+# variables, and shipping a template only invites confusion.
+**/.env
+**/.env.*
+
+# Local-only tooling
+scripts
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
+**/.pnpm-debug.log*
+**/*.pem
+
+# Docker's own files
+Dockerfile*
+docker-compose*
+.dockerignore

@@ -1,26 +1,172 @@
 @import "tailwindcss";
 
+/* Tailwind v4 has no `darkMode` config key — the class/attribute strategy is a
+   custom variant. Matches the `data-theme` attribute the inline theme script
+   sets before first paint. */
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #fafafa;
+  --foreground: #09090b;
+  --card: #ffffff;
+  --muted: #e8ecf0;
+  --muted-foreground: #475569; /* 7.3:1 on --background */
+  --border: #e4e4e7; /* decorative rules only */
+  --border-strong: #71717a; /* 4.6:1 — form controls, WCAG 1.4.11 */
+  --accent: #2563eb; /* 5.0:1 on --background */
+  --accent-contrast: #ffffff;
+  --destructive: #b91c1c; /* 6.2:1 on --background */
+  --ring: #18181b;
+}
+
+[data-theme="dark"] {
+  --background: #09090b;
+  --foreground: #fafafa;
+  --card: #18181b;
+  --muted: #27272a;
+  --muted-foreground: #a1a1aa; /* 7.8:1 on --background */
+  --border: #27272a;
+  --border-strong: #71717a; /* 4.1:1 */
+  --accent: #60a5fa; /* 7.8:1 — #2563eb would be 3.4:1 here */
+  --accent-contrast: #09090b;
+  --destructive: #f87171; /* 7.2:1 — #b91c1c would be 2.2:1 here */
+  --ring: #fafafa;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-accent: var(--accent);
+  --color-accent-contrast: var(--accent-contrast);
+  --color-destructive: var(--destructive);
+  --color-ring: var(--ring);
+
+  /* One grotesque for both roles: `--font-display` stays a separate token so
+     the headings can be moved to another face without touching every call
+     site, but today both resolve to Archivo. */
+  --font-sans: var(--font-archivo);
+  --font-display: var(--font-archivo);
+  --font-mono: var(--font-plex-mono);
+
+  /* Swiss Minimal: near-square corners, no shadows. */
+  --radius-swiss: 2px;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+
+  html {
+    scroll-behavior: smooth;
+    /* Sticky header height, so anchor targets are not hidden underneath it. */
+    scroll-padding-top: 5rem;
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display), var(--font-sans), sans-serif;
+    /* Vietnamese stacks diacritics above capitals — "Nguyễn", "Kiên", "Điện"
+       all put a mark well above cap height. At the display leading the type
+       spec allows (0.95–1.15) anything under ~1.15 collides those marks with
+       the descenders of the line above on a wrapped heading, so 1.15 — the top
+       of that range — is the value used everywhere. Set here as the floor for
+       headings that carry no explicit size utility; Tailwind's `text-*`
+       utilities ship their own line-height and win over this layer, which is
+       why every display heading also spells out `leading-[1.15]`. */
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--ring);
+    outline-offset: 2px;
+    border-radius: 1px;
+  }
+
+  /* Only theme-related properties transition globally; anything broader makes
+     scroll-driven reveals fight their own animation. */
+  body,
+  header,
+  [data-theme-surface] {
+    transition:
+      background-color 200ms ease,
+      border-color 200ms ease,
+      color 200ms ease;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer utilities {
+  /* Set by the watchdog in ThemeScript when the motion bundle never ran. */
+  .reveal-fallback [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .container-swiss {
+    width: 100%;
+    max-width: 72rem; /* 1152px content + gutters ≈ 1200px */
+    margin-inline: auto;
+    padding-inline: 1.5rem;
+  }
+
+  @media (min-width: 768px) {
+    .container-swiss {
+      padding-inline: 2.5rem;
+    }
+  }
+
+  /* Uppercase mono label used for section numbers, dates and tags. 0.16em sits
+     mid-range of the 0.14–0.2em the eyebrow spec calls for; below 0.14em the
+     uppercase mono reads as body text rather than a label. */
+  .label-mono {
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.75rem;
+    line-height: 1.4;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+  }
+
+  /* The one display size on the page. `leading-[1.15]` is not optional here —
+     see the diacritic note on the heading rules above. */
+  .display-hero {
+    font-size: clamp(2.75rem, 7vw, 6rem);
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+  }
 }

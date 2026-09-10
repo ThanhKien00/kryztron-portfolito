@@ -32,6 +32,7 @@ yarn-error.log*
 
 # env files (can opt-in for committing if needed)
 .env*
+!.env.example
 
 # vercel
 .vercel
@@ -39,3 +40,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# editor and agent tooling — every dot-directory, at any depth.
+# `.github/` is exempt because CI configuration belongs in the repository.
+.*/
+!.github/
+
+# agent instructions and lock files. README.md is the project's own page and
+# stays tracked; these three are local assistant configuration.
+AGENTS.md
+CLAUDE.md
+MEMORY.md
+skills-lock.json
