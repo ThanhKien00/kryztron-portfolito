@@ -26,8 +26,15 @@ jobs:
 
       - run: npm ci
 
+      # Runs `next typegen` before `tsc`: `tsconfig.json` includes
+      # `.next/types/**`, where Next writes the generated `PageProps` /
+      # `LayoutProps` globals that typed routes rely on. `.next/` is
+      # gitignored, so on a clean checkout those globals do not exist and
+      # `tsc` fails with TS2304. `typegen` writes them without paying for a
+      # full build. Same script locally, so CI cannot drift from `npm run
+      # typecheck`.
       - name: Typecheck
-        run: npx tsc --noEmit
+        run: npm run typecheck
 
       - name: Lint
         run: npm run lint
