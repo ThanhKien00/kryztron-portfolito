@@ -38,3 +38,9 @@ export const initialContactState: ContactState = {
 };
 
 export const MAX_MESSAGE_LENGTH = 2000;
+
+/** Generous for any real name; mainly a guard against abuse on a public endpoint. */
+export const MAX_NAME_LENGTH = 200;
+
+/** RFC 5321's limit on the total address length. */
+export const MAX_EMAIL_LENGTH = 254;

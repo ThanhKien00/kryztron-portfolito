@@ -5,13 +5,14 @@ const vi = {
     title: "Nguyễn Thành Kiên — Kỹ sư phần mềm",
     description:
       "Kỹ sư phần mềm hơn 3 năm kinh nghiệm làm backend với Java và Spring Framework. Có kinh nghiệm với PostgreSQL, MySQL, MongoDB, Redis, Apache Kafka, Docker, K8S và xây dựng hệ thống Microservices.",
-    ogAlt: "Nguyễn Thành Kiên — Kỹ sư phầm mềm, Hà Nội",
+    ogAlt: "Nguyễn Thành Kiên — Kỹ sư phần mềm, Hà Nội",
   },
 
   nav: {
     work: "Dự án",
     about: "Giới thiệu",
     experience: "Kinh nghiệm",
+    writing: "Bài viết",
     contact: "Liên hệ",
     menu: "Mở menu",
     close: "Đóng menu",
@@ -20,7 +21,14 @@ const vi = {
 
   hero: {
     experienceSummary: "Kỹ sư backend · Java & Spring Framework",
+    greeting: "Xin chào, tôi là",
     role: "Kỹ sư phần mềm",
+    roles: [
+      "Kỹ sư Backend",
+      "Lập trình viên Java & Spring",
+      "Xây dựng hệ Microservices",
+      "Hướng tới Solution Architect",
+    ],
     tagline:
       "Xây dựng các hệ thống Backend: Modular Monolith, Microservices Architecture, cùng tầng dữ liệu và messaging bên dưới, với 3+ năm kinh nghiệm làm domain viễn thông và SaaS doanh nghiệp.",
     location: "Hà Nội, Việt Nam",
@@ -37,9 +45,15 @@ const vi = {
     teamLabel: "Quy mô nhóm",
     stackLabel: "Công nghệ",
     highlightsLabel: "Tham gia thực hiện",
+    periodLabel: "Thời gian",
+    exploreLabel: "Xem chi tiết",
+    backLabel: "Về danh sách dự án",
+    nextLabel: "Dự án tiếp theo",
+    previousLabel: "Dự án trước",
     items: {
       targetx: {
         name: "TargetX — Nền tảng quảng cáo số",
+        badge: "Viễn thông · AdTech",
         role: "Kỹ sư Backend",
         summary:
           "Nền tảng quảng cáo phía cầu (DSP) cho doanh nghiệp đăng ký, xây dựng tệp khách hàng và chạy chiến dịch SMS, push notification trên hệ sinh thái Viettel. Advertiser Portal quản lý thương hiệu, chiến dịch, nội dung quảng cáo, tệp khách hàng và ví. Admin Portal duyệt nhà quảng cáo và chiến dịch, cấu hình chính sách giá, giám sát hiệu quả.",
@@ -55,6 +69,7 @@ const vi = {
       },
       smePortal: {
         name: "SME Portal — Nền tảng thương mại điện tử cho doanh nghiệp vừa và nhỏ",
+        badge: "SaaS đa khách hàng",
         role: "Kỹ sư Backend",
         summary:
           "Nền tảng SaaS đa khách hàng để doanh nghiệp vừa và nhỏ tìm, mua và quản lý dịch vụ số của TPComs: cloud, hosting, tên miền, email và CRM. Nền tảng bao trọn vòng đời dịch vụ: danh mục, đơn hàng, thuê bao, cấp phát, hợp đồng, tính cước, thanh toán, quản lý khách hàng và helpdesk. Admin Portal, SME Portal và ứng dụng di động là ba kênh phục vụ.",
@@ -71,6 +86,7 @@ const vi = {
       },
       autoGrading: {
         name: "Hệ thống chấm trắc nghiệm tự động và tạo đề thi",
+        badge: "Giáo dục · Thị giác máy tính",
         role: "Lập trình viên Backend",
         summary:
           "Hệ thống chấm phiếu trả lời trắc nghiệm bằng mô hình xử lý ảnh đã huấn luyện. Hệ thống cũng quản lý sinh viên, giảng viên, môn học, kỳ thi, bài nộp và kết quả.",
@@ -89,13 +105,20 @@ const vi = {
     heading: "Giới thiệu",
     portraitAlt: "Ảnh chân dung Nguyễn Thành Kiên",
     lead: [
-      "Kỹ sư phần mềm hơn 3 năm làm backend với Java và Spring. Tôi thiết kế và xây dựng RESTful API cùng microservices, làm việc với cơ sở dữ liệu quan hệ, caching và hàng đợi tin nhắn.",
-      "Tôi đã làm dự án trong thương mại điện tử, thanh toán, quản lý giáo dục và viễn thông. Tôi tìm một môi trường chuyên nghiệp để thiết kế giải pháp hiệu quả cho hệ thống phức tạp.",
+      "Kỹ sư phần mềm hơn **3 năm** làm backend với **Java** và **Spring**. Tôi thiết kế và xây dựng **RESTful API** cùng **microservices**, làm việc với cơ sở dữ liệu quan hệ, **caching** và **hàng đợi tin nhắn**.",
+      "Tôi đã làm dự án trong **thương mại điện tử**, **thanh toán**, **quản lý giáo dục** và **viễn thông**. Tôi tìm một môi trường chuyên nghiệp để thiết kế giải pháp hiệu quả cho hệ thống phức tạp.",
     ],
+    statsHeading: "Vài con số",
+    stats: {
+      years: "Năm kinh nghiệm",
+      projects: "Hệ thống production",
+      technologies: "Công nghệ",
+      toeic: "Điểm TOEIC",
+    },
     goalsHeading: "Mục tiêu nghề nghiệp",
     goals: [
       "Tạo ra các phần mềm chất lượng cao, mang giá trị thực cho người dùng.",
-      "nhắm tới vị trí Solution Architect, thiết kế kiến trúc hiệu năng cao cho các hệ thống phức tạp.",
+      "Nhắm tới vị trí Solution Architect, thiết kế kiến trúc hiệu năng cao cho các hệ thống phức tạp.",
       "Phát triển thành kỹ sư senior với trách nhiệm lớn.",
     ],
     toolsHeading: "Tech Stack",
@@ -119,9 +142,9 @@ const vi = {
     languagesHeading: "Ngoại ngữ",
     certifications: {
       toeic: "TOEIC",
-      vstep: "VSTEP (Bậc 4/6, Khung năng lực ngoại ngữ Việt Nam)",
+      vstep: "VSTEP",
     },
-    languagesNote: "Tôi đọc hiểu tài liệu kỹ thuật chuyên ngành.",
+    languagesNote: "Đọc hiểu, viết tài liệu kỹ thuật chuyên ngành.",
   },
 
   experience: {
@@ -168,6 +191,14 @@ const vi = {
     },
   },
 
+  writing: {
+    heading: "Bài viết",
+    intro:
+      "Những bài phân tích sâu về kiến trúc backend, JVM và cơ sở dữ liệu bên dưới — đăng trên newsletter của tôi.",
+    viewAll: "Tất cả bài viết",
+    opensOnSubstack: "(mở trên Substack)",
+  },
+
   contact: {
     heading: "Liên hệ",
     prompt: "Bạn có bài toán backend cần giải?",
@@ -176,6 +207,8 @@ const vi = {
     phoneLabel: "Điện thoại",
     githubLabel: "GitHub",
     linkedinLabel: "LinkedIn",
+    copyLabel: "Sao chép địa chỉ email",
+    copiedLabel: "Đã sao chép địa chỉ email",
     form: {
       name: "Tên của bạn",
       namePlaceholder: "Nguyễn Văn A",
@@ -221,6 +254,8 @@ const vi = {
     body: "Trang này không tồn tại hoặc đã chuyển đi.",
     back: "Về trang chủ",
   },
+
+  backToTop: "Lên đầu trang",
 } satisfies Dictionary;
 
 export default vi;

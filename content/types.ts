@@ -3,6 +3,7 @@ import type {
   JobKey,
   ProjectKey,
   SkillGroupKey,
+  StatKey,
 } from "./profile";
 import type { SectionId } from "@/lib/site";
 
@@ -33,7 +34,15 @@ export interface Dictionary {
   hero: {
     /** Mono eyebrow above the name. Also reused by the OG image route. */
     experienceSummary: string;
+    /** Small greeting directly above the name — "Hi, I'm". */
+    greeting: string;
     role: string;
+    /**
+     * Cycled one at a time under the name. `roles[0]` is what a
+     * reduced-motion reader (and the server render) sees, so put the most
+     * accurate title first.
+     */
+    roles: string[];
     tagline: string;
     location: string;
     ctaWork: string;
@@ -49,15 +58,33 @@ export interface Dictionary {
     teamLabel: string;
     stackLabel: string;
     highlightsLabel: string;
+    periodLabel: string;
+    /** Card footer link into the detail page. */
+    exploreLabel: string;
+    /** Detail page's link back to the grid. */
+    backLabel: string;
+    nextLabel: string;
+    previousLabel: string;
     items: Record<
       ProjectKey,
       {
         name: string;
+        /** Overlay chip on the cover — the project's domain in one word. */
+        badge: string;
         role: string;
         summary: string;
         highlights: string[];
       }
     >;
+  };
+
+  /** Newsletter posts pulled from Substack at build time. */
+  writing: {
+    heading: string;
+    intro: string;
+    viewAll: string;
+    /** Appended to each card's accessible name — "(opens on Substack)". */
+    opensOnSubstack: string;
   };
 
   /**
@@ -69,8 +96,15 @@ export interface Dictionary {
     heading: string;
     /** Alternative text for the portrait beside the lead paragraphs. */
     portraitAlt: string;
-    /** Two paragraphs — rendered as separate `<p>`s, not one wall of text. */
+    /**
+     * Two paragraphs — rendered as separate `<p>`s, not one wall of text.
+     * `**double asterisks**` mark the runs that render bold and full-contrast
+     * against the otherwise muted paragraph; see `components/ui/rich-text.tsx`.
+     */
     lead: string[];
+    statsHeading: string;
+    /** Caption under each figure in the stats row. Values live in `profile.ts`. */
+    stats: Record<StatKey, string>;
     goalsHeading: string;
     goals: string[];
     toolsHeading: string;
@@ -105,6 +139,9 @@ export interface Dictionary {
     phoneLabel: string;
     githubLabel: string;
     linkedinLabel: string;
+    /** Accessible name and confirmation for the copy-email button. */
+    copyLabel: string;
+    copiedLabel: string;
     form: {
       name: string;
       namePlaceholder: string;
@@ -150,4 +187,7 @@ export interface Dictionary {
     body: string;
     back: string;
   };
+
+  /** Accessible name for the floating scroll-to-top control. */
+  backToTop: string;
 }

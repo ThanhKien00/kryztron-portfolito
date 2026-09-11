@@ -4,7 +4,9 @@ import { useActionState, useId } from "react";
 import { sendMessage } from "@/actions/send-message";
 import {
   initialContactState,
+  MAX_EMAIL_LENGTH,
   MAX_MESSAGE_LENGTH,
+  MAX_NAME_LENGTH,
   type ContactState,
 } from "@/actions/contact-state";
 import { AlertIcon, CheckIcon } from "@/components/ui/icons";
@@ -25,7 +27,7 @@ type Props = {
  * a failed validation — never at rest.
  */
 const fieldClass =
-  "mt-2 w-full rounded-swiss border border-border-strong bg-card px-3 py-2.5 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-foreground aria-invalid:border-destructive";
+  "mt-2 w-full rounded-control border border-border-strong bg-card px-3 py-2.5 text-base text-foreground outline-none transition-colors placeholder:text-muted-foreground focus-visible:border-foreground aria-invalid:border-destructive";
 
 function StatusBanner({ state, mailtoHref, dict }: { state: ContactState } & Props) {
   if (state.status === "idle" || state.message === "") return null;
@@ -35,7 +37,7 @@ function StatusBanner({ state, mailtoHref, dict }: { state: ContactState } & Pro
 
   return (
     <p
-      className={`flex items-start gap-2 rounded-swiss border px-3 py-2.5 text-sm ${
+      className={`flex items-start gap-2 rounded-control border px-3 py-2.5 text-sm ${
         ok ? "border-foreground text-foreground" : "border-destructive text-foreground"
       }`}
     >
@@ -75,50 +77,56 @@ export function ContactForm(props: Props) {
         <input id={`${id}-company`} name="company" type="text" tabIndex={-1} autoComplete="off" />
       </div>
 
-      <div>
-        <label htmlFor={nameId} className="label-mono text-muted-foreground">
-          {dict.contact.form.name}
-        </label>
-        <input
-          id={nameId}
-          name="name"
-          type="text"
-          autoComplete="name"
-          required
-          defaultValue={state.values.name}
-          placeholder={dict.contact.form.namePlaceholder}
-          aria-describedby={state.fieldErrors.name ? `${nameId}-error` : undefined}
-          aria-invalid={state.fieldErrors.name ? true : undefined}
-          className={fieldClass}
-        />
-        {state.fieldErrors.name ? (
-          <p id={`${nameId}-error`} className="mt-1.5 text-sm text-destructive">
-            {state.fieldErrors.name}
-          </p>
-        ) : null}
-      </div>
+      {/* Name and email share a row from `sm` up: two short fields stacked
+          full-width push the message box below the fold on a laptop. */}
+      <div className="grid gap-5 sm:grid-cols-2">
+        <div>
+          <label htmlFor={nameId} className="label-mono text-muted-foreground">
+            {dict.contact.form.name}
+          </label>
+          <input
+            id={nameId}
+            name="name"
+            type="text"
+            autoComplete="name"
+            required
+            maxLength={MAX_NAME_LENGTH}
+            defaultValue={state.values.name}
+            placeholder={dict.contact.form.namePlaceholder}
+            aria-describedby={state.fieldErrors.name ? `${nameId}-error` : undefined}
+            aria-invalid={state.fieldErrors.name ? true : undefined}
+            className={fieldClass}
+          />
+          {state.fieldErrors.name ? (
+            <p id={`${nameId}-error`} className="mt-1.5 text-sm text-destructive">
+              {state.fieldErrors.name}
+            </p>
+          ) : null}
+        </div>
 
-      <div>
-        <label htmlFor={emailId} className="label-mono text-muted-foreground">
-          {dict.contact.form.email}
-        </label>
-        <input
-          id={emailId}
-          name="email"
-          type="email"
-          autoComplete="email"
-          required
-          defaultValue={state.values.email}
-          placeholder={dict.contact.form.emailPlaceholder}
-          aria-describedby={state.fieldErrors.email ? `${emailId}-error` : undefined}
-          aria-invalid={state.fieldErrors.email ? true : undefined}
-          className={fieldClass}
-        />
-        {state.fieldErrors.email ? (
-          <p id={`${emailId}-error`} className="mt-1.5 text-sm text-destructive">
-            {state.fieldErrors.email}
-          </p>
-        ) : null}
+        <div>
+          <label htmlFor={emailId} className="label-mono text-muted-foreground">
+            {dict.contact.form.email}
+          </label>
+          <input
+            id={emailId}
+            name="email"
+            type="email"
+            autoComplete="email"
+            required
+            maxLength={MAX_EMAIL_LENGTH}
+            defaultValue={state.values.email}
+            placeholder={dict.contact.form.emailPlaceholder}
+            aria-describedby={state.fieldErrors.email ? `${emailId}-error` : undefined}
+            aria-invalid={state.fieldErrors.email ? true : undefined}
+            className={fieldClass}
+          />
+          {state.fieldErrors.email ? (
+            <p id={`${emailId}-error`} className="mt-1.5 text-sm text-destructive">
+              {state.fieldErrors.email}
+            </p>
+          ) : null}
+        </div>
       </div>
 
       <div>
@@ -144,13 +152,15 @@ export function ContactForm(props: Props) {
         ) : null}
       </div>
 
-      <button
-        type="submit"
-        disabled={pending}
-        className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-swiss bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-60"
-      >
-        {pending ? dict.contact.form.submitting : dict.contact.form.submit}
-      </button>
+      <div className="flex justify-end">
+        <button
+          type="submit"
+          disabled={pending}
+          className="inline-flex min-h-11 cursor-pointer items-center justify-center rounded-control bg-foreground px-5 text-sm font-medium text-background transition-opacity hover:opacity-85 disabled:cursor-not-allowed disabled:opacity-60"
+        >
+          {pending ? dict.contact.form.submitting : dict.contact.form.submit}
+        </button>
+      </div>
 
       <div aria-live="polite" aria-atomic="true">
         <StatusBanner {...props} state={state} />

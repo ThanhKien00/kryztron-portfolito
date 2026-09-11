@@ -12,6 +12,7 @@ const en = {
     work: "Work",
     about: "About",
     experience: "Experience",
+    writing: "Writing",
     contact: "Contact",
     menu: "Open menu",
     close: "Close menu",
@@ -20,7 +21,14 @@ const en = {
 
   hero: {
     experienceSummary: "Backend engineer · Java & Spring",
+    greeting: "Hi, I'm",
     role: "Software Engineer",
+    roles: [
+      "Backend Engineer",
+      "Java & Spring Developer",
+      "Microservices Builder",
+      "Future Solution Architect",
+    ],
     tagline:
       "I build backend systems: RESTful APIs, microservices, and the data and messaging layers under them. Three years in telecom and enterprise SaaS.",
     location: "Hanoi, Vietnam",
@@ -37,9 +45,15 @@ const en = {
     teamLabel: "Team size",
     stackLabel: "Stack",
     highlightsLabel: "What I built",
+    periodLabel: "Period",
+    exploreLabel: "Explore",
+    backLabel: "Back to selected work",
+    nextLabel: "Next project",
+    previousLabel: "Previous project",
     items: {
       targetx: {
         name: "TargetX — Digital Advertising Platform",
+        badge: "Telecom · AdTech",
         role: "Backend Engineer",
         summary:
           "A demand-side platform (DSP) where enterprises register, build customer segments and run SMS and push-notification campaigns across the Viettel ecosystem. The Advertiser Portal manages brands, campaigns, ad content, segments and wallets. The Admin Portal approves advertisers and campaigns, sets pricing policies and tracks performance.",
@@ -55,6 +69,7 @@ const en = {
       },
       smePortal: {
         name: "SME Portal — E-commerce Platform for SMEs",
+        badge: "Multi-tenant SaaS",
         role: "Backend Engineer",
         summary:
           "A multi-tenant SaaS platform where small and medium enterprises search, buy and manage the digital services of TPComs: cloud, hosting, domain, email and CRM. It covers the full service lifecycle: catalog, order, subscription, provisioning, contract, billing, payment, customer management and helpdesk. An Admin Portal, an SME Portal and a mobile application deliver it.",
@@ -71,6 +86,7 @@ const en = {
       },
       autoGrading: {
         name: "Automatic Multiple-Choice Grading & Test Creation System",
+        badge: "EdTech · Computer Vision",
         role: "Backend Developer",
         summary:
           "A system that grades multiple-choice answer sheets with a trained image-processing model. It also manages students, teachers, subjects, exams, submissions and results.",
@@ -89,16 +105,23 @@ const en = {
     heading: "About",
     portraitAlt: "Portrait of Nguyen Thanh Kien",
     lead: [
-      "Software Engineer with more than 3 years of Java and Spring backend work. I design and build RESTful APIs and microservices, and I work with relational databases, caching and message queues.",
-      "I delivered projects in e-commerce, payment, education management and telecommunications. I now look for a professional team where I can design efficient solutions for complex systems.",
+      "Software Engineer with more than **3 years** of **Java** and **Spring** backend work. I design and build **RESTful APIs** and **microservices**, and I work with relational databases, **caching** and **message queues**.",
+      "I delivered projects in **e-commerce**, **payment**, **education management** and **telecommunications**. I now look for a professional team where I can design efficient solutions for complex systems.",
     ],
+    statsHeading: "By the numbers",
+    stats: {
+      years: "Years of experience",
+      projects: "Production systems",
+      technologies: "Technologies",
+      toeic: "TOEIC score",
+    },
     goalsHeading: "Career goals",
     goals: [
       "Deliver high-quality software that brings real value to users.",
       "Become a Solution Architect who designs efficient architecture for complex software.",
       "Grow into a senior engineer with greater responsibility.",
     ],
-    toolsHeading: "Tools",
+    toolsHeading: "Tech I use",
     groups: {
       languages: "Languages",
       backend: "Backend stack",
@@ -168,6 +191,14 @@ const en = {
     },
   },
 
+  writing: {
+    heading: "Writing",
+    intro:
+      "Deep dives into backend architecture, the JVM and the databases underneath — published on my newsletter.",
+    viewAll: "All posts",
+    opensOnSubstack: "(opens on Substack)",
+  },
+
   contact: {
     heading: "Contact",
     prompt: "Have a backend problem worth solving?",
@@ -176,6 +207,8 @@ const en = {
     phoneLabel: "Phone",
     githubLabel: "GitHub",
     linkedinLabel: "LinkedIn",
+    copyLabel: "Copy email address",
+    copiedLabel: "Email address copied",
     form: {
       name: "Your name",
       namePlaceholder: "Jane Doe",
@@ -221,6 +254,8 @@ const en = {
     body: "This page does not exist, or it moved.",
     back: "Back to home",
   },
+
+  backToTop: "Back to top",
 } satisfies Dictionary;
 
 export default en;

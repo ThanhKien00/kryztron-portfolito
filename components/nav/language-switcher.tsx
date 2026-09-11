@@ -80,7 +80,7 @@ export function LanguageSwitcher({ current, label, names }: Props) {
   return (
     <details ref={detailsRef} className="relative">
       <summary
-        className="inline-flex size-11 cursor-pointer list-none items-center justify-center rounded-swiss border border-border transition-colors hover:border-border-strong hover:bg-muted [&::-webkit-details-marker]:hidden"
+        className="inline-flex size-11 cursor-pointer list-none items-center justify-center rounded-control border border-border transition-colors hover:border-border-strong hover:bg-muted [&::-webkit-details-marker]:hidden"
       >
         {/* The hairline keeps the white edge of the Union Jack off a light
             background; without it the flag loses its own outline. */}
@@ -93,7 +93,7 @@ export function LanguageSwitcher({ current, label, names }: Props) {
       {/* A plain list of links, not `role="menu"`: the menu role promises
           arrow-key navigation, and these are ordinary links in tab order. */}
       <ul
-        className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-max rounded-swiss border border-border bg-card p-1"
+        className="absolute right-0 top-[calc(100%+0.5rem)] z-50 w-max rounded-card border border-border bg-card p-1"
       >
         {locales.map((locale) => {
           const active = locale === current;
@@ -105,7 +105,7 @@ export function LanguageSwitcher({ current, label, names }: Props) {
                 href={hrefFor(locale)}
                 hrefLang={locale}
                 aria-current={active ? "true" : undefined}
-                className={`flex min-h-11 items-center gap-3 rounded-swiss px-3 text-sm whitespace-nowrap transition-colors hover:bg-muted ${
+                className={`flex min-h-11 items-center gap-3 rounded-control px-3 text-sm whitespace-nowrap transition-colors hover:bg-muted ${
                   active ? "text-foreground" : "text-muted-foreground"
                 }`}
               >

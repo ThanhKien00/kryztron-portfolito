@@ -6,54 +6,50 @@ type Props = {
   id: SectionId;
   heading: string;
   intro?: string;
-  /**
-   * `stacked` puts the heading in a band above content that spans all twelve
-   * columns. Only Selected Work uses it — the covers need the full container
-   * width, and it is the one section allowed to be the widest thing on the page.
-   */
-  layout?: "split" | "stacked";
   children: ReactNode;
 };
 
 /**
- * Section shell: mono section number, heading in the left column, content in the
- * right. Collapses to a single column below `md`.
+ * Section shell: a mono label with the section number, trailed by a hairline
+ * out to the right margin, then full-width content underneath.
  *
  * The number is read from `sectionIds` rather than passed in, so the heading can
  * never disagree with the number the navbar shows for the same anchor.
  */
-export function Section({ id, heading, intro, layout = "split", children }: Props) {
+export function Section({ id, heading, intro, children }: Props) {
   const number = String(sectionIds.indexOf(id) + 1).padStart(2, "0");
 
-  const header = (
-    <Reveal>
-      <p className="label-mono text-muted-foreground">{number} /</p>
-      <h2 className="mt-3 text-3xl leading-[1.15] font-semibold tracking-tight sm:text-4xl">
-        {heading}
-      </h2>
-      {intro ? (
-        <p className={`mt-4 text-muted-foreground ${layout === "stacked" ? "max-w-md" : "text-sm md:max-w-xs"}`}>
-          {intro}
-        </p>
-      ) : null}
-    </Reveal>
-  );
-
   return (
-    <section id={id} className="scroll-mt-20 border-t border-border">
-      <div className="container-swiss py-20 md:py-32">
-        {layout === "stacked" ? (
-          <>
-            <div className="max-w-2xl">{header}</div>
-            <div className="mt-14 md:mt-20">{children}</div>
-          </>
-        ) : (
-          <div className="grid gap-10 md:grid-cols-12 md:gap-10">
-            <div className="md:col-span-4 lg:col-span-3">{header}</div>
-            <div className="md:col-span-8 lg:col-span-8 lg:col-start-5">{children}</div>
+    <section id={id} className="scroll-mt-20">
+      <div className="container-swiss py-16 md:py-24">
+        <Reveal>
+          <div className="flex items-center gap-4">
+            <h2 className="label-mono shrink-0 text-muted-foreground">
+              {number} / {heading}
+            </h2>
+            <span aria-hidden="true" className="section-rule" />
           </div>
-        )}
+          {intro ? (
+            <p className="mt-4 max-w-3xl text-sm text-muted-foreground">
+              {intro}
+            </p>
+          ) : null}
+        </Reveal>
+        <div className="mt-10 md:mt-12">{children}</div>
       </div>
     </section>
+  );
+}
+
+/**
+ * The same label + hairline treatment for sub-blocks inside a section (the
+ * tech grid inside About, say). Not numbered — only top-level anchors are.
+ */
+export function SubLabel({ children }: { children: ReactNode }) {
+  return (
+    <div className="flex items-center gap-4">
+      <h3 className="label-mono shrink-0 text-muted-foreground">{children}</h3>
+      <span aria-hidden="true" className="section-rule" />
+    </div>
   );
 }

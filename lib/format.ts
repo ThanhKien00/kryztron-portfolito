@@ -24,6 +24,28 @@ export function formatMonth(locale: Locale, value: string): string {
   }).format(date);
 }
 
+/**
+ * Formats a "YYYY-MM-DD" string as a full date, for post cards.
+ *
+ * Same locale split as `formatMonth`: `DD/MM/YYYY` in Vietnamese so the label
+ * stays on one line, abbreviated month in English.
+ */
+export function formatDate(locale: Locale, value: string): string {
+  const [year, month, day] = value.split("-").map(Number);
+  if (!year || !month || !day) return value;
+
+  if (locale === "vi") {
+    return `${String(day).padStart(2, "0")}/${String(month).padStart(2, "0")}/${year}`;
+  }
+
+  return new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC",
+  }).format(new Date(Date.UTC(year, month - 1, day)));
+}
+
 export function formatRange(
   locale: Locale,
   from: string,

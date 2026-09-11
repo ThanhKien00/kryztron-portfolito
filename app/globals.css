@@ -6,24 +6,27 @@
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
 :root {
-  --background: #fafafa;
+  --background: #ffffff;
   --foreground: #09090b;
   --card: #ffffff;
-  --muted: #e8ecf0;
-  --muted-foreground: #475569; /* 7.3:1 on --background */
+  --muted: #f4f4f5;
+  --muted-foreground: #52525b; /* 7.4:1 on --background */
   --border: #e4e4e7; /* decorative rules only */
-  --border-strong: #71717a; /* 4.6:1 — form controls, WCAG 1.4.11 */
-  --accent: #2563eb; /* 5.0:1 on --background */
+  --border-strong: #71717a; /* 4.7:1 — form controls, WCAG 1.4.11 */
+  --accent: #2563eb; /* 5.2:1 on --background */
   --accent-contrast: #ffffff;
-  --destructive: #b91c1c; /* 6.2:1 on --background */
+  --destructive: #b91c1c; /* 6.4:1 on --background */
   --ring: #18181b;
+  /* Page-wide dot lattice. Kept low enough that body copy sitting on top of it
+     still measures against --background for contrast purposes. */
+  --dot: rgb(9 9 11 / 0.07);
 }
 
 [data-theme="dark"] {
   --background: #09090b;
   --foreground: #fafafa;
-  --card: #18181b;
-  --muted: #27272a;
+  --card: #121215;
+  --muted: #1c1c1f;
   --muted-foreground: #a1a1aa; /* 7.8:1 on --background */
   --border: #27272a;
   --border-strong: #71717a; /* 4.1:1 */
@@ -31,6 +34,7 @@
   --accent-contrast: #09090b;
   --destructive: #f87171; /* 7.2:1 — #b91c1c would be 2.2:1 here */
   --ring: #fafafa;
+  --dot: rgb(250 250 250 / 0.055);
 }
 
 @theme inline {
@@ -46,15 +50,20 @@
   --color-destructive: var(--destructive);
   --color-ring: var(--ring);
 
-  /* One grotesque for both roles: `--font-display` stays a separate token so
-     the headings can be moved to another face without touching every call
-     site, but today both resolve to Archivo. */
-  --font-sans: var(--font-archivo);
-  --font-display: var(--font-archivo);
-  --font-mono: var(--font-plex-mono);
+  /* One monospace face for every role. `--font-display` and `--font-mono` stay
+     separate tokens so a heading or label face can be swapped later without
+     touching every call site, but today all three resolve to JetBrains Mono —
+     the terminal-grotesque look the design targets. */
+  --font-sans: var(--font-jetbrains);
+  --font-display: var(--font-jetbrains);
+  --font-mono: var(--font-jetbrains);
 
-  /* Swiss Minimal: near-square corners, no shadows. */
-  --radius-swiss: 2px;
+  /* Three radii, by role. Cards and covers are the roundest thing on the page;
+     chips and 44px controls sit one step tighter so a chip inside a card does
+     not read as a second card. */
+  --radius-card: 0.625rem;
+  --radius-chip: 0.5rem;
+  --radius-control: 0.5rem;
 }
 
 @layer base {
@@ -72,7 +81,10 @@
   body {
     background-color: var(--background);
     color: var(--foreground);
-    font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+    font-family: var(--font-sans), ui-monospace, monospace;
+    /* JetBrains Mono sets wide by design; a hair of negative tracking keeps a
+       full paragraph from reading as spaced-out code at 16px. */
+    letter-spacing: -0.01em;
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
   }
@@ -81,7 +93,7 @@
   h2,
   h3,
   h4 {
-    font-family: var(--font-display), var(--font-sans), sans-serif;
+    font-family: var(--font-display), var(--font-sans), monospace;
     /* Vietnamese stacks diacritics above capitals — "Nguyễn", "Kiên", "Điện"
        all put a mark well above cap height. At the display leading the type
        spec allows (0.95–1.15) anything under ~1.15 collides those marks with
@@ -151,6 +163,22 @@
     }
   }
 
+  /* The page-wide lattice. Rendered once as a fixed `-z-10` layer in the root
+     layout rather than as a `body` background so it does not scroll with the
+     content and so card surfaces can sit half-transparent on top of it. */
+  .dot-grid {
+    background-image: radial-gradient(var(--dot) 1px, transparent 1px);
+    background-size: 18px 18px;
+    background-position: 0 0;
+  }
+
+  /* The hairline that trails every section label out to the right margin. */
+  .section-rule {
+    height: 1px;
+    flex: 1 1 0%;
+    background-color: var(--border);
+  }
+
   /* Uppercase mono label used for section numbers, dates and tags. 0.16em sits
      mid-range of the 0.14–0.2em the eyebrow spec calls for; below 0.14em the
      uppercase mono reads as body text rather than a label. */
@@ -162,11 +190,15 @@
     text-transform: uppercase;
   }
 
-  /* The one display size on the page. `leading-[1.15]` is not optional here —
-     see the diacritic note on the heading rules above. */
+  /* The one display size on the page. Capped at 4.5rem rather than the 6rem a
+     proportional face allowed: JetBrains Mono is a fixed 0.6em advance, so
+     "Nguyễn Thành Kiên" (17 cells) needs ~46rem of line at 4.5rem and would
+     overrun the 72rem container one step higher. `leading-[1.15]` is not
+     optional here — see the diacritic note on the heading rules above. */
   .display-hero {
-    font-size: clamp(2.75rem, 7vw, 6rem);
+    font-size: clamp(2rem, 5.5vw, 4.5rem);
+    font-weight: 700;
     line-height: 1.15;
-    letter-spacing: -0.03em;
+    letter-spacing: -0.025em;
   }
 }

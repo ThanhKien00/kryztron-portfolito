@@ -68,7 +68,7 @@ export function ThemeToggle({ labelToLight, labelToDark }: Props) {
       onClick={toggle}
       // 44px: WCAG 2.2 AA only asks for 24, but every header control is a
       // one-handed mobile target, and 44 still leaves 10px of air in the h-16 bar.
-      className="inline-flex size-11 cursor-pointer items-center justify-center rounded-swiss border border-border text-foreground transition-colors hover:border-border-strong hover:bg-muted"
+      className="inline-flex size-11 cursor-pointer items-center justify-center rounded-control border border-border text-foreground transition-colors hover:border-border-strong hover:bg-muted"
     >
       <MoonIcon className="size-4 dark:hidden" />
       <SunIcon className="hidden size-4 dark:block" />

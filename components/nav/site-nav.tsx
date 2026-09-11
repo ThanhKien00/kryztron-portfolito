@@ -12,6 +12,7 @@ import { createPortal } from "react-dom";
 import {
   BriefcaseIcon,
   CloseIcon,
+  FileTextIcon,
   LayersIcon,
   MailIcon,
   MenuIcon,
@@ -29,6 +30,7 @@ const navIcons: Record<SectionId, ComponentType<SVGProps<SVGSVGElement>>> = {
   about: UserIcon,
   experience: BriefcaseIcon,
   work: LayersIcon,
+  writing: FileTextIcon,
   contact: MailIcon,
 };
 
@@ -46,6 +48,8 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
   const [active, setActive] = useState<SectionId | null>(null);
   const [open, setOpen] = useState(false);
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const panelRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const sections = items
@@ -69,7 +73,16 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
     return () => observer.disconnect();
   }, [items]);
 
-  // Lock background scroll and close on Escape while the drawer is open.
+  // Closing anywhere but the trigger itself (Escape, the X, a nav link) would
+  // otherwise drop focus to <body> once the close button unmounts — return it
+  // to the control that opened the drawer instead.
+  const close = useCallback(() => {
+    setOpen(false);
+    triggerRef.current?.focus();
+  }, []);
+
+  // Lock background scroll, trap focus and close on Escape while the drawer is
+  // open.
   useEffect(() => {
     if (!open) return;
 
@@ -78,7 +91,29 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
     closeButtonRef.current?.focus();
 
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key === "Escape") setOpen(false);
+      if (event.key === "Escape") {
+        close();
+        return;
+      }
+
+      // `role="dialog"` + `aria-modal` promise that the rest of the page is
+      // unreachable while this is open; without this, Shift+Tab from the
+      // first focusable element falls back into the page hidden behind the
+      // overlay, since the drawer is portalled to the end of <body>.
+      if (event.key !== "Tab" || !panelRef.current) return;
+      const focusable = panelRef.current.querySelectorAll<HTMLElement>(
+        "a[href], button:not([disabled])",
+      );
+      if (focusable.length === 0) return;
+      const first = focusable[0];
+      const last = focusable[focusable.length - 1];
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
+      }
     };
     document.addEventListener("keydown", onKeyDown);
 
@@ -86,7 +121,7 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
       document.body.style.overflow = previousOverflow;
       document.removeEventListener("keydown", onKeyDown);
     };
-  }, [open]);
+  }, [open, close]);
 
   // Sans, sentence case, normal tracking: the uppercase mono label this used to
   // carry stacks Vietnamese diacritics on top of capitals ("GIỚI THIỆU") and the
@@ -103,7 +138,7 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
   return (
     <>
       <nav className="hidden md:block" aria-label="Primary">
-        <ul className="flex items-center gap-5">
+        <ul className="flex items-center gap-4 lg:gap-5">
           {items.map((item) => {
             const Icon = navIcons[item.id];
             return (
@@ -113,7 +148,10 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
                   aria-current={active === item.id ? "location" : undefined}
                   className={linkClass(item.id)}
                 >
-                  <Icon className="size-4 shrink-0" />
+                  {/* Five labels plus five icons plus the social row overflow
+                      the 768–1023px band; the icons are decorative, so they
+                      are what goes. */}
+                  <Icon className="hidden size-4 shrink-0 lg:block" />
                   {/* The underline marks the active section on the word only:
                       WCAG 1.4.1 wants a second channel beside ink weight, and an
                       underline running under the icon reads as a strike. */}
@@ -132,11 +170,12 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
       </nav>
 
       <button
+        ref={triggerRef}
         type="button"
         onClick={() => setOpen(true)}
         aria-expanded={open}
         aria-controls="mobile-nav"
-        className="inline-flex size-11 cursor-pointer items-center justify-center rounded-swiss border border-border transition-colors hover:border-border-strong hover:bg-muted md:hidden"
+        className="inline-flex size-11 cursor-pointer items-center justify-center rounded-control border border-border transition-colors hover:border-border-strong hover:bg-muted md:hidden"
       >
         <MenuIcon className="size-4" />
         <span className="sr-only">{menuLabel}</span>
@@ -150,6 +189,7 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
       {open && typeof document !== "undefined"
         ? createPortal(
             <div
+              ref={panelRef}
               id="mobile-nav"
               role="dialog"
               aria-modal="true"
@@ -160,8 +200,8 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
                 <button
                   ref={closeButtonRef}
                   type="button"
-                  onClick={() => setOpen(false)}
-                  className="inline-flex size-11 cursor-pointer items-center justify-center rounded-swiss border border-border transition-colors hover:border-border-strong hover:bg-muted"
+                  onClick={close}
+                  className="inline-flex size-11 cursor-pointer items-center justify-center rounded-control border border-border transition-colors hover:border-border-strong hover:bg-muted"
                 >
                   <CloseIcon className="size-4" />
                   <span className="sr-only">{closeLabel}</span>
@@ -175,7 +215,7 @@ export function SiteNav({ items, menuLabel, closeLabel }: Props) {
                       <li key={item.id}>
                         <a
                           href={`#${item.id}`}
-                          onClick={() => setOpen(false)}
+                          onClick={close}
                           className="flex min-h-11 items-center gap-3 border-b border-border py-4 text-2xl font-medium"
                         >
                           <Icon className="size-5 shrink-0 text-muted-foreground" />

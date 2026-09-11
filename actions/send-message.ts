@@ -4,7 +4,13 @@ import { Resend } from "resend";
 import { getDictionaryFor } from "@/app/[lang]/dictionaries";
 import { defaultLocale, isLocale } from "@/lib/locales";
 import { profile } from "@/content/profile";
-import { emptyValues, MAX_MESSAGE_LENGTH, type ContactState } from "./contact-state";
+import {
+  emptyValues,
+  MAX_EMAIL_LENGTH,
+  MAX_MESSAGE_LENGTH,
+  MAX_NAME_LENGTH,
+  type ContactState,
+} from "./contact-state";
 
 // Deliberately permissive: the authoritative check is whether a reply bounces,
 // and over-strict regexes reject valid addresses.
@@ -32,8 +38,10 @@ export async function sendMessage(
   const values = { name, email, message };
 
   const fieldErrors: ContactState["fieldErrors"] = {};
-  if (name.length === 0) fieldErrors.name = t.invalidName;
-  if (!EMAIL_PATTERN.test(email)) fieldErrors.email = t.invalidEmail;
+  if (name.length === 0 || name.length > MAX_NAME_LENGTH) fieldErrors.name = t.invalidName;
+  if (!EMAIL_PATTERN.test(email) || email.length > MAX_EMAIL_LENGTH) {
+    fieldErrors.email = t.invalidEmail;
+  }
   if (message.length === 0) fieldErrors.message = t.invalidMessage;
   else if (message.length > MAX_MESSAGE_LENGTH) fieldErrors.message = t.messageTooLong;
 
@@ -49,14 +57,20 @@ export async function sendMessage(
     return { status: "unconfigured", message: t.unconfigured, fieldErrors: {}, values };
   }
 
+  // `subject` becomes a raw email header line: a name containing CR/LF could
+  // otherwise inject extra headers (e.g. "Evil\r\nBcc: attacker@evil.com").
+  // `email` is already immune — EMAIL_PATTERN's `\s` exclusion rejects any
+  // whitespace, CR/LF included — but `name` has no such restriction.
+  const headerSafeName = name.replace(/[\r\n]+/g, " ");
+
   try {
     const resend = new Resend(apiKey);
     const { error } = await resend.emails.send({
       from: process.env.CONTACT_FROM_EMAIL ?? "onboarding@resend.dev",
       to: process.env.CONTACT_TO_EMAIL ?? profile.email,
       replyTo: email,
-      subject: `Portfolio contact — ${name}`,
-      text: `From: ${name} <${email}>\nLocale: ${locale}\n\n${message}`,
+      subject: `Portfolio contact — ${headerSafeName}`,
+      text: `From: ${headerSafeName} <${email}>\nLocale: ${locale}\n\n${message}`,
     });
 
     if (error) {

@@ -172,3 +172,98 @@ export function AlertIcon(props: IconProps) {
     </Base>
   );
 }
+
+export function ArrowUpIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M12 19V5M5 12l7-7 7 7" />
+    </Base>
+  );
+}
+
+export function ArrowUpRightIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M7 17 17 7M8 7h9v9" />
+    </Base>
+  );
+}
+
+export function ArrowLeftIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M19 12H5M12 19l-7-7 7-7" />
+    </Base>
+  );
+}
+
+export function CopyIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <rect x="9" y="9" width="12" height="12" rx="2" />
+      <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+    </Base>
+  );
+}
+
+export function ExternalLinkIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6" />
+      <path d="M15 3h6v6M10 14 21 3" />
+    </Base>
+  );
+}
+
+export function FileTextIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+      <path d="M14 2v6h6M8 13h8M8 17h6" />
+    </Base>
+  );
+}
+
+export function CodeIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <path d="m16 18 6-6-6-6M8 6l-6 6 6 6" />
+    </Base>
+  );
+}
+
+export function CalendarIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <rect x="3" y="5" width="18" height="16" rx="2" />
+      <path d="M16 3v4M8 3v4M3 11h18" />
+    </Base>
+  );
+}
+
+export function AwardIcon(props: IconProps) {
+  return (
+    <Base {...props}>
+      <circle cx="12" cy="9" r="6" />
+      <path d="m9 14.5-1.5 7L12 19l4.5 2.5L15 14.5" />
+    </Base>
+  );
+}
+
+/**
+ * Substack's wordmark glyph — the three stacked bars. Solid, not stroked, so
+ * it is drawn outside `Base`.
+ */
+export function SubstackIcon(props: IconProps) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      aria-hidden="true"
+      focusable="false"
+      {...props}
+    >
+      <path d="M3.5 3h17v2.6h-17V3Zm0 4.7h17v2.6h-17V7.7Zm0 4.7L12 17l8.5-4.6V21L12 16.4 3.5 21v-8.6Z" />
+    </svg>
+  );
+}
